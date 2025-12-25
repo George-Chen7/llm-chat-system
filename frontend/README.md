@@ -1,161 +1,73 @@
-# 前端项目说明
+# React + TypeScript + Vite
 
-## 📁 项目结构
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-```
-frontend/
-├── src/
-│   ├── api/              # API接口定义
-│   │   ├── auth.ts       # 认证相关API
-│   │   ├── chat.ts       # 聊天相关API
-│   │   └── request.ts    # Axios请求封装
-│   ├── components/       # 组件目录
-│   │   ├── chat/         # 聊天相关组件
-│   │   │   ├── ChatInput.vue        # 消息输入框
-│   │   │   ├── ChatMessage.vue      # 单条消息组件
-│   │   │   ├── MessageList.vue      # 消息列表
-│   │   │   └── MarkdownRenderer.vue # Markdown渲染组件
-│   │   └── layout/       # 布局组件
-│   │       ├── Layout.vue           # 主布局
-│   │       └── Header.vue           # 头部导航
-│   ├── router/           # 路由配置
-│   │   └── index.ts      # 路由定义和守卫
-│   ├── stores/         # Pinia状态管理
-│   │   ├── chat.ts       # 聊天状态
-│   │   └── user.ts       # 用户状态
-│   ├── styles/           # 样式文件
-│   │   └── main.css      # 全局样式
-│   ├── types/            # TypeScript类型定义
-│   │   └── index.ts      # 通用类型
-│   ├── utils/            # 工具函数
-│   │   ├── constants.ts  # 常量配置
-│   │   └── format.ts     # 格式化工具
-│   ├── views/            # 页面视图
-│   │   ├── ChatView.vue  # 聊天主页面
-│   │   ├── LoginView.vue # 登录页面
-│   │   └── RegisterView.vue # 注册页面
-│   ├── App.vue           # 根组件
-│   ├── main.ts           # 入口文件
-│   └── env.d.ts          # 类型声明
-├── index.html            # HTML模板
-├── package.json          # 依赖配置
-├── tsconfig.json         # TypeScript配置
-├── vite.config.ts        # Vite配置
-└── tailwind.config.js    # Tailwind配置
-```
+Currently, two official plugins are available:
 
-## 🚀 快速开始
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-### 安装依赖
+## React Compiler
 
-```bash
-npm install
-```
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-### 开发模式
+## Expanding the ESLint configuration
 
-```bash
-npm run dev
-```
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-访问 http://localhost:3000
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-### 构建生产版本
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-```bash
-npm run build
-```
-
-### 代码检查
-
-```bash
-npm run lint
-```
-
-### 代码格式化
-
-```bash
-npm run format
-```
-
-## 🛠️ 技术栈
-
-- **Vue 3** - 渐进式JavaScript框架
-- **TypeScript** - 类型安全的JavaScript
-- **Vite** - 下一代前端构建工具
-- **Pinia** - Vue状态管理
-- **Vue Router** - 官方路由管理器
-- **Element Plus** - Vue 3组件库
-- **Tailwind CSS** - 实用优先的CSS框架
-- **Axios** - HTTP客户端
-- **Marked** - Markdown解析器
-- **Highlight.js** - 代码高亮
-
-## 📝 核心功能
-
-### 1. 用户认证
-- 用户登录/注册
-- Token管理
-- 路由守卫
-
-### 2. 聊天功能
-- 实时消息发送
-- 流式响应（SSE）
-- 消息历史记录
-- Markdown渲染
-- 代码高亮
-
-### 3. 状态管理
-- Pinia Store管理
-- 用户状态持久化
-- 聊天状态管理
-
-## 🔧 配置说明
-
-### API代理配置
-
-在 `vite.config.ts` 中配置了API代理：
-
-```typescript
-server: {
-  proxy: {
-    '/api': {
-      target: 'http://localhost:8080',
-      changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/api/, ''),
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
     },
   },
-}
+])
 ```
 
-### 路径别名
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-- `@/` 指向 `src/` 目录
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## 📦 主要依赖
-
-### 生产依赖
-- vue: ^3.4.21
-- vue-router: ^4.3.0
-- pinia: ^2.1.7
-- element-plus: ^2.5.6
-- axios: ^1.6.7
-- marked: ^11.1.1
-- highlight.js: ^11.9.0
-
-### 开发依赖
-- typescript: ~5.3.3
-- vite: ^5.1.0
-- vue-tsc: ^1.8.27
-- eslint: ^8.57.0
-- prettier: ^3.2.5
-- tailwindcss: ^3.4.1
-
-## 🎯 下一步开发
-
-1. 语音交互功能（STT/TTS）
-2. 文件上传和解析
-3. 多会话管理
-4. 对话历史持久化
-5. 用户配额控制
-
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
